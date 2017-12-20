@@ -1,0 +1,31 @@
+digraph dataflow {
+    node [fontname="dejavu sans mono"]
+
+    node [shape="box" color="deepskyblue" fillcolor="deepskyblue" style="filled,rounded"]
+    hot_database [label="hot database\n~/.mozilla/firefox/[hash].default/places.sqlite"]
+    cold_database [label="cold database\n/usr/share/bkm/data/places.sqlite/[first_own_timestamp]_[whoami]_[hostname]_[hash].default_places.sqlite"]
+    all_bookmarks [label="all bookmarks\ndatetime_added | url | title"]
+    clean_bookmarks [label="clean bookmarks\ndatetime_added | url | title"]
+    relevant_bookmarks [label="relevant bookmarks\ndatetime_added | url | title"]
+
+    // http://graphviz.996277.n3.nabble.com/Constant-radius-for-circle-shape-node-td1769.html
+    node [shape="circle" color="#ff005e" fillcolor="#ff005e" style="filled"] //  width="1" heigth="1" fixedsize="true"
+    copy [label=" copy "]
+    extract [label="extract" shape="circle"]
+    clean [label=" clean " shape="circle"]
+    grep [label=" grep " shape="circle"]
+
+    node [shape="box" color="#ffd000" fillcolor="#ffd000" style="filled,rounded"]
+    sql_query [label="sql query\nselect ..."]
+    delete_patterns [label="delete patterns\n/usr/share/bkm/data/delete_patterns.txt"]
+    search_patterns [label="search patterns"]
+
+    hot_database -> copy
+    copy -> cold_database
+    {cold_database sql_query} -> extract
+    extract -> all_bookmarks
+    {all_bookmarks delete_patterns} -> clean
+    clean -> clean_bookmarks
+    {clean_bookmarks search_patterns} -> grep
+    grep -> relevant_bookmarks
+}

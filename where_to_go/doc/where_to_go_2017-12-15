@@ -1,0 +1,6 @@
+[2017-12-16 00:27:36] ~/projects/where_to_go
+    dot -Tpdf wtg.dot -o wtg.pdf
+
+[2017-12-18 00:27:36] ~/projects/where_to_go
+    dot -Tpdf dataflow_wtg.dot -o dataflow_wtg.pdf
+

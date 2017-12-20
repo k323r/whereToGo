@@ -1,0 +1,18 @@
+digraph wtg {
+    node [fontname="dejavu sans mono"]
+
+    node [shape="box"] // color="deepskyblue" fillcolor="deepskyblue" style="filled,rounded"]
+//    node [shape="box" color="#ffd000" fillcolor="#ffd000" style="filled,rounded"]
+//    node [shape="circle" color="#ff005e" fillcolor="#ff005e" style="filled"] //  width="1" heigth="1" fixedsize="true"
+//    http://graphviz.996277.n3.nabble.com/Constant-radius-for-circle-shape-node-td1769.html
+    Sensoren [label="Sensoren:\l  GPS\l  Magnet/Gyro/Acc\l  Microphone\l"]
+    Engine [label="Engine:\l  Kalman-Filter\l  Navi\l"]
+    Interface [label="
+Interface:
+  Bildschirm
+  Sonar Ping
+"]
+
+    Sensoren -> Engine
+    Engine -> Interface
+}
