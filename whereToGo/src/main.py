@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+import multiprocessing
+import sys
+
 from fusion import gen_fusion
 from navigation import compute_navigation, is_valid
 from sensors import (
@@ -12,9 +15,6 @@ from sensors import (
     prod_velo_from_acc,
 )
 from ui import get_user_input, display, sonar_ping
-
-import multiprocessing
-import sys
 
 
 def main():
@@ -48,11 +48,18 @@ def main():
             target_pos,
             target_time
         )
-        target_heading, target_velocity, estimated_toa = navigation
+        (
+            target_heading,
+            target_distance,
+            target_time_left,
+            target_velocity,
+            estimated_duration,
+            estimated_toa
+        ) = navigation
 
-        if is_valid(target_heading, target_velocity, estimated_toa):
-            display(target_heading, target_velocity, estimated_toa)
-            sonar_ping(target_heading, target_velocity, estimated_toa)
+        if is_valid(*navigation):
+            display(*navigation)
+            sonar_ping(*navigation)
 
 
 if __name__ == '__main__':

@@ -11,7 +11,6 @@ def prod_gps(queue, period=0.0):
         # skip headings
         gpss.next()
         for gps in gpss:
-            time.sleep(period)
             datetime_sys = str(datetime.datetime.now())
             datetime_gps, latitude, longitude, altitude, velocity_gps = gps.strip().split()
             queue.put((
@@ -23,3 +22,4 @@ def prod_gps(queue, period=0.0):
                 altitude,
                 velocity_gps
             ))
+            time.sleep(period)

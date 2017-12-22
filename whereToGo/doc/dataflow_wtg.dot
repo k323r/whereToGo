@@ -28,8 +28,8 @@ mic\n\
 
     node [shape="box" color="deepskyblue" fillcolor="deepskyblue" style="filled,rounded"]
 
-    clean_gps [label="clean_gps"]
-    clean_mag_etc [label="clean_[mag|gyro|acc|mic]"]
+    clean_gps [label="clean gps"]
+    clean_mag_etc [label="clean [mag|gyro|acc|mic]"]
     fusion [label="fusion\nadapted to available sensors"]
     compute_navigation [label="compute navigation"]
     are_data_valid [label="are data valid?"]
@@ -68,14 +68,17 @@ generic sensor data \l\
     user_input [label="\
 user input \l\
 * target position \l\
-* constraints (e.g. time) \l\
+* target time \l\
 "]
 
     navigation [label="\
 navigation \l\
 * target heading \l\
+* target distance \l\
+* target time left \l\
 * target velocity \l\
-* estimated time of arrival (<- estimated velocity) \l\
+* estimated duration \l\
+* estimated time of arrival \l\
 "]
 
 

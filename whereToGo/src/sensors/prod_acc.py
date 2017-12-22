@@ -11,6 +11,6 @@ def prod_acc(queue, period=0.0):
         # skip headings
         accelerations.next()
         for acc in accelerations:
-            time.sleep(period)
             datetime_sys = str(datetime.datetime.now())
             queue.put(('acc', datetime_sys, acc))
+            time.sleep(period)
