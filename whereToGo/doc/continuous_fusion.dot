@@ -5,37 +5,57 @@ digraph continuous_fusion {
 
     node [fontname="dejavu sans mono"]
 
-    // multiple raw data streams
-    prod_acc
-    prod_gps
-    prod_gyro
-    prod_mag
-    prod_mic
-
     // data structure / os utility / array of memory
     queue [shape="circle" color="#ff005e" fillcolor="#ff005e" style="filled"] //  width="1" heigth="1" fixedsize="true"
 
-    {prod_acc prod_gps prod_gyro prod_mag prod_mic} -> queue [style=dotted]
+    subgraph cluster_sensor_processes {
+        style = "filled,rounded"
+        color = "deepskyblue"
+        label = "produce_sensor_data"
+        fontname = "dejavu sans mono"
+
+        // multiple raw data streams
+        acc [style=filled,color=white]
+        gps [style=filled,color=white]
+        gyro [style=filled,color=white]
+        mag [style=filled,color=white]
+        mic [style=filled,color=white]
+    }
+
+    {acc gps gyro mag mic} -> queue //[style=dotted]
 
     subgraph cluster_fusion_process {
         style = "filled,rounded"
         color = "deepskyblue"
-        label = "fusion process"
+        label = "generate_fusion_result \l"
+
         fontname = "dejavu sans mono"
 
         // process / generator ==> iterable
-        gen_fusion [style=filled,color=white]
+        generate_snapshot [style=filled,color=white]
+        update_fusion_state [style=filled,color=white]
+        compute_fusion_result [style=filled,color=white]
 
         // data / single memory address / structured? pointer?
-        node [shape="box" fillcolor="#ffd000" style="filled,rounded"]
+        node [shape="box" fillcolor="#ffd000" color="#ffd000" style="filled,rounded"]
         snapshot
         fusion_state
 
-        snapshot -> gen_fusion
-        fusion_state -> gen_fusion -> fusion_state
+        snapshot
+            -> update_fusion_state 
+            -> fusion_state 
+            -> update_fusion_state
+        
+        fusion_state -> compute_fusion_result
     }
 
-    queue -> snapshot
-    fusion_result [shape="box" fillcolor="#ffd000" style="filled,rounded"]
-    gen_fusion -> fusion_result -> navigation
+    // fusion_process -> generate_snapshot [color=deepskyblue]
+//    fusion_process [label="fusion" color=white style=filled]
+//    queue -> fusion_process -> generate_snapshot -> snapshot
+    queue -> generate_snapshot -> snapshot
+
+//    snapshot -> queue
+//    queue -> snapshot
+    fusion_result [shape="box" color="white" fillcolor="#ffd000" style="filled,rounded"]
+    compute_fusion_result -> fusion_result -> navigation
 }

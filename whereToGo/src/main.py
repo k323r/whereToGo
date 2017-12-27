@@ -3,7 +3,7 @@
 import multiprocessing
 import sys
 
-from fusion import gen_fusion
+from fusion import gen_fusion_result
 from navigation import compute_navigation, is_valid
 from sensors import (
     prod_acc,
@@ -36,9 +36,9 @@ def main():
     acc_producer_p.start()
     gps_producer_p.start()
 
-    fused_datas = gen_fusion(queue)
-    for fused_data in fused_datas:
-        cur_time, cur_pos, cur_head, cur_alt, cur_velo = fused_data
+    fusion_results = gen_fusion_result(queue)
+    for fusion_result in fusion_results:
+        cur_time, cur_pos, cur_head, cur_alt, cur_velo = fusion_result
 
         navigation = compute_navigation(
             cur_time,

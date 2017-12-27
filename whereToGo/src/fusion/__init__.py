@@ -1,1 +1,1 @@
-from gen_fusion import gen_fusion
+from gen_fusion_result import gen_fusion_result
