@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# nextcloud data
+.db
+.db-shm
+.db-wal
+
