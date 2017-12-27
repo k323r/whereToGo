@@ -1,0 +1,41 @@
+// rendering:
+// dot -Tpdf continuous_fusion.dot -o continuous_fusion.pdf
+
+digraph continuous_fusion {
+
+    node [fontname="dejavu sans mono"]
+
+    // multiple raw data streams
+    prod_acc
+    prod_gps
+    prod_gyro
+    prod_mag
+    prod_mic
+
+    // data structure / os utility / array of memory
+    queue [shape="circle" color="#ff005e" fillcolor="#ff005e" style="filled"] //  width="1" heigth="1" fixedsize="true"
+
+    {prod_acc prod_gps prod_gyro prod_mag prod_mic} -> queue [style=dotted]
+
+    subgraph cluster_fusion_process {
+        style = "filled,rounded"
+        color = "deepskyblue"
+        label = "fusion process"
+        fontname = "dejavu sans mono"
+
+        // process / generator ==> iterable
+        gen_fusion [style=filled,color=white]
+
+        // data / single memory address / structured? pointer?
+        node [shape="box" fillcolor="#ffd000" style="filled,rounded"]
+        snapshot
+        fusion_state
+
+        snapshot -> gen_fusion
+        fusion_state -> gen_fusion -> fusion_state
+    }
+
+    queue -> snapshot
+    fusion_result [shape="box" fillcolor="#ffd000" style="filled,rounded"]
+    gen_fusion -> fusion_result -> navigation
+}

@@ -1,5 +1,5 @@
 import datetime
-from math import atan2, cos, sin, pi
+from math import pi
 
 ### >>> magic to allow imports from lib etc. ##################
 ###     courtesy: https://stackoverflow.com/a/1054293
@@ -9,63 +9,11 @@ sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 ### <<< magic
 
-from lib import Latlon, deg_to_rad
+from lib import Latlon
 
+from _get_distance import _get_distance as get_distance
+from _get_heading import _get_heading as get_heading
 
-EARTH_RADIUS_METERS = 6371000
-
-
-def get_distance(a, b):
-    """
-    Return the great arc distance in meters, using the haversine formula.
-
-    Input: Latlons a, b (lat, lon in degrees).
-
-    Courtesy:
-        http://www.movable-type.co.uk/scripts/latlong.html
-    """
-    a_lat_rad = deg_to_rad(a.lat)
-    a_lon_rad = deg_to_rad(a.lon)
-    b_lat_rad = deg_to_rad(b.lat)
-    b_lon_rad = deg_to_rad(b.lon)
-    x = sin((b_lat_rad - a_lat_rad) / 2.0)**2 + cos(a_lat_rad) * cos(b_lat_rad) * sin((b_lon_rad - a_lon_rad) / 2.0)**2
-    y = 2.0 * atan2(x**0.5, (1-x)**0.5)
-    distance = EARTH_RADIUS_METERS * y
-    return distance
-
-def get_heading(a, b):
-    """
-    Return the initial heading from a to b, clockwise from north in radian:
-
-             0
-             N
-    -pi/2 W     E pi/2
-             S
-           +-pi
-
-    Input: Latlons a, b (lat, lon in degrees).
-
-    Courtesy:
-        http://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
-        http://www.movable-type.co.uk/scripts/latlong.html
-        http://mathforum.org/library/drmath/view/55417.html
-
-    Other sources to check out:
-        http://www.geomidpoint.com/destination/
-        https://community.esri.com/thread/88164
-        http://mathforum.org/library/drmath/view/55417.html
-        https://en.wikipedia.org/wiki/Bearing_%28navigation%29
-        https://en.wikipedia.org/wiki/Course_(navigation)
-        https://en.wikipedia.org/wiki/Geographic_coordinate_system
-    """
-    a_lat_rad = deg_to_rad(a.lat)
-    a_lon_rad = deg_to_rad(a.lon)
-    b_lat_rad = deg_to_rad(b.lat)
-    b_lon_rad = deg_to_rad(b.lon)
-    y = cos(b_lat_rad) * sin(b_lon_rad - a_lon_rad)
-    x = cos(a_lat_rad) * sin(b_lat_rad) - sin(a_lat_rad) * cos(b_lat_rad) * cos(b_lon_rad - a_lon_rad)
-    heading = atan2(y, x)
-    return heading
 
 def compute_navigation(
                     cur_time,
@@ -101,37 +49,3 @@ if __name__ == '__main__':
     target_pos = Latlon(52.0571713, 9.8167359)
     target_time = datetime.datetime(2017, 12, 20, 15, 39, 10, 234567)
 
-    O = Latlon(0.0, 0.0)
-    N = Latlon(80.0, 0.0)
-    S = Latlon(-80.0, 0.0)
-    E = Latlon(0.0, 80.0)
-    W = Latlon(0.0, -80.0)
-
-    assert get_heading(O, N) == 0.0
-    assert get_heading(N, O) == pi
-
-    assert get_heading(O, S) == pi
-    assert get_heading(S, O) == 0.0
-
-    assert get_heading(O, E) == pi / 2.0
-    assert get_heading(E, O) == -pi / 2.0
-
-    assert get_heading(O, W) == -pi / 2.0
-    assert get_heading(W, O) == pi / 2.0
-
-"""
-    berlin = Latlon(52.52000659999999, 13.404953999999975)
-    paris = Latlon(48.856614, 2.3522219000000177)
-
-    print 'berlin -> paris', get_distance(berlin, paris), 'm'
-    
-    a = Latlon(10.0, 10.0)
-    b = Latlon(20.0, 10.0)
-    c = Latlon(20.0, 20.0)
-
-    print a, b, get_heading(a, b)
-    print b, a, get_heading(b, a)
-
-    print a, c, get_heading(a, c)
-    print c, a, get_heading(c, a)
-"""

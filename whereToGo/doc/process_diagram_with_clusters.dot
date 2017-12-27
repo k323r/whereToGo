@@ -1,0 +1,37 @@
+// dotguide.pdf --> Figure 19: Process diagram with clusters
+// NOTE: the code below is a cleaned up version
+
+// rendering:
+// dot -Tpdf process_diagram_with_clusters.dot -o process_diagram_with_clusters.pdf
+
+digraph G {
+
+    subgraph cluster0 {
+        style = filled
+        color = lightgrey
+        label = "process #1"
+
+        node [style=filled,color=white]
+        a0 -> a1 -> a2 -> a3 -> a0
+    }
+
+    subgraph cluster1 {
+        label = "process #2"
+        color=blue
+
+        node [style=filled]
+        b0 -> b1 -> b2 -> b3
+    }
+
+    start [shape=Mdiamond]
+    end [shape=Msquare]
+
+    start -> a0
+    start -> b0
+
+    a1 -> b3
+    b2 -> a3
+
+    a3 -> end
+    b3 -> end
+}
