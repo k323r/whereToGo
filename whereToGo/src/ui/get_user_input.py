@@ -15,6 +15,6 @@ def get_user_input():
     try:
         target_pos, target_time = sys.argv[1:]
     except ValueError:
-        target_pos = Latlon(57.0, 8.0)
+        target_pos = Latlon(37.0, 18.0)
         target_time = datetime.datetime(2018, 12, 18, 06, 12, 38, 123456)
     return (target_pos, target_time)

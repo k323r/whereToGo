@@ -3,6 +3,7 @@ def is_valid(
         target_distance,
         target_time_left,
         target_velocity,
+        current_velocity,
         estimated_duration,
         estimated_toa):
     return True

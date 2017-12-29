@@ -9,8 +9,10 @@ sys.path.append(
 ### <<< magic
 
 from lib import deg_to_rad as rad
+from lib import rad_to_deg as deg
 
-def _get_heading(a, b):
+
+def _get_heading_rad(a, b):
     """
     Return the initial heading from a to b, clockwise from north in radian:
 
@@ -36,9 +38,34 @@ def _get_heading(a, b):
     """
     y = cos(rad(b.lat)) * sin(rad(b.lon) - rad(a.lon))
     x = (cos(rad(a.lat)) * sin(rad(b.lat)) - sin(rad(a.lat)) * cos(rad(b.lat)) * cos(rad(b.lon) - rad(a.lon)))
+    heading_rad = atan2(y, x)
+    return heading_rad
 
-    heading = atan2(y, x)
-    return heading
+def _get_heading_deg(a, b):
+    """
+    Return the initial heading from a to b, clockwise from north in DEGREES:
+
+             0
+             N
+      -90 W     E 90
+             S
+           +-180
+
+    Input: Latlons a, b (lat, lon in degrees).
+
+    Courtesy:
+        http://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
+        http://www.movable-type.co.uk/scripts/latlong.html
+        http://mathforum.org/library/drmath/view/55417.html
+
+    Other sources to check out:
+        http://www.geomidpoint.com/destination/
+        https://community.esri.com/thread/88164
+        https://en.wikipedia.org/wiki/Bearing_%28navigation%29
+        https://en.wikipedia.org/wiki/Course_(navigation)
+        https://en.wikipedia.org/wiki/Geographic_coordinate_system
+    """
+    return deg(_get_heading_rad(a, b))
 
 
 if __name__ == '__main__':
